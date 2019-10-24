@@ -1,0 +1,5 @@
+dev-ui/*
+dev-api/*
+redis/*
+var/*
+mysql/*

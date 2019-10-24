@@ -1,0 +1,68 @@
+version: '3'
+services:
+  web:
+      build:
+        context: .
+        dockerfile: ./containers/nginx/Dockerfile
+      container_name: web
+      ports:
+          - "80:80"
+      depends_on:
+          - php
+          - php_api  
+      networks:
+          - app-network
+  php:
+      build:
+        context: .
+        dockerfile: ./containers/php/Dockerfile
+      container_name: php
+      volumes:
+         - ./dev-ui/:/var/www/html/
+      networks:
+        - app-network
+      
+  php_api:
+         build:
+           context: .
+           dockerfile: ./containers/php/Dockerfile
+         container_name: php_api
+         volumes:
+           - ./dev-api/:/var/www/html/
+         networks:
+           - app-network        
+        
+#MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: furthered
+      MYSQL_ROOT_PASSWORD: WY6dfWI&MQL*#
+    volumes:
+      - /var/lib/docker/volumes/dockerlawline_container-volume/_data/:/var/lib/mysql
+        # - ./furthed.sql:/dump.sql
+    networks:
+      - app-network
+
+  redis:
+    container_name: redis
+    image: redis:4-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/:/data
+    networks:
+      - app-network
+      
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:   
+  container-volume:
