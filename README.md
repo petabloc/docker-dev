@@ -25,6 +25,7 @@ Lawline dev environment setup on local ubnutu machine
    - Execute the --build command for first time or when you have change in docker file
 
         docker-compose up -d --build 
+
    - Create the container
 
         docker-compose up -d 
