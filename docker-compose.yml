@@ -44,8 +44,8 @@ services:
       MYSQL_DATABASE: furthered
       MYSQL_ROOT_PASSWORD: WY6dfWI&MQL*#
     volumes:
-      - /var/lib/docker/volumes/dockerlawline_container-volume/_data/:/var/lib/mysql
-        # - ./furthed.sql:/dump.sql
+      - db-data:/var/lib/mysql
+      - ./furthed.sql:/dump.sql
     networks:
       - app-network
 
@@ -65,4 +65,4 @@ networks:
     driver: bridge
 #Volumes
 volumes:   
-  container-volume:
+  db-data:

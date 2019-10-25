@@ -13,6 +13,9 @@ Lawline dev environment setup on local ubnutu machine
 
  - Checkout of dev-ui and dev-api code in current repo
 
+	Change the volume path in docker-compose.yml volume section of php and php_api
+ 
+        File permission using chmod 777 dev-ui -R && chmod 777 dev-api -R
 
  - MySQL DB dump on local
 
@@ -29,3 +32,10 @@ Lawline dev environment setup on local ubnutu machine
    - Create the container
 
         docker-compose up -d 
+
+ - Add web container IP address into the your hosts file. You can find the ip address using following command 
+
+	docker inspect web | grep "IPAddress"	
+
+    EX : 172.19.0.6 docker.sixmilliondollarsite.com api.docker.sixmilliondollarsite.com
+
