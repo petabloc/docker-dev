@@ -46,25 +46,35 @@ Lawline dev environment setup on local ubnutu machine
 
  - Following Code changes on your local 
 
-	- Create the docker.php file and add below lines ( ../vendor/furthered/bionic/config/docker.php )
+ 	- Create the docker.php file and add below lines ( ../vendor/furthered/bionic/config/docker.php )
 
-		"<?php return ['api' => [ 'base_uri' => 'http://api.docker.sixmilliondollarsite.com', 'auth' => ['faster', 'stronger'], ],'redis' => ['host' => 'redis','port' => 6379,],'encrypt' => ['consumers' => ['ui'],],];?>"
+	<?php return ['api' => [ 'base_uri' => 'http://api.docker.sixmilliondollarsite.com', 'auth' => ['faster', 'stronger'], ],'redis' => ['host' => 'redis','port' => 6379,],'encrypt' => ['consumers' => ['ui'],],];?>
 
   	- Replace or change the below line in file ( ../vendor/furthered/bionic/src/Config.php )  with 1st line to 2nd line
-		 #self::$config = require __DIR__ . '/../config/' . self::environment() . '.php';
-		  self::$config = require __DIR__ . '/../config/docker.php';
+
+		#self::$config = require __DIR__ . '/../config/' . self::environment() . '.php';
+
+		self::$config = require __DIR__ . '/../config/docker.php';
 
 
   - .Env file changes are following 
 
   	APP_ENV=docker
+
 	DB_CONNECTION=mysql
+
 	DB_HOST=db
+
 	DB_PORT=3306
-	DB_DATABASE=furthered
+
+	DB_DATABASE=furthered 
+
 	DB_USERNAME=furthered
-	DB_PASSWORD="WY6dfWI&MQL*#"
+
+	DB_PASSWORD="********"
+
 	REDIS_HOST=redis
+
 	REDIS_PORT=6379
 
 
