@@ -45,7 +45,7 @@ services:
       MYSQL_ROOT_PASSWORD: WY6dfWI&MQL*#
     volumes:
       - db-data:/var/lib/mysql
-      - ./furthed.sql:/dump.sql
+      - ./furthed:/docker-entrypoint-initdb.d  
     networks:
       - app-network
 

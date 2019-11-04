@@ -3,3 +3,6 @@ dev-api/*
 redis/*
 var/*
 mysql/*
+
+furthed/*
+test.sql
