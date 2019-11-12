@@ -58,6 +58,50 @@ services:
       - ./redis/:/data
     networks:
       - app-network
+
+  elasticsearch:
+    container_name: elasticsearch      
+    #image: elasticsearch:6.8.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.4
+    ports:
+      - 9200:9200
+    environment:
+
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.watcher.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - node.name=stretch_armstrong
+        #- http.host=0.0.0.0
+        #- transport.host=0.0.0.0
+        #- max_map_count=262144  
+        #- node.ml=false
+        # - xpack.ml.enabled=false
+        #- discovery.type=single-node
+        #- xpack.license.self_generated.type=trial
+        #- xpack.security.enabled=${SECURITY_ENABLED}
+        # - xpack.security.http.ssl.enabled=${SECURITY_ENABLED}
+        #- xpack.security.transport.ssl.enabled=${SECURITY_ENABLED}
+        # - xpack.monitoring.enabled=${MONITORING_ENABLED}
+        #- "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+        #- http.port=9200
+        #- transport.tcp.port=9301     
+        #- "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        # - http.cors.enabled=true
+        #  - http.cors.allow-origin=*
+        #- discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - eldata:/usr/share/elasticsearch/data
+    networks:
+      - app-network
       
 #Docker Networks
 networks:
@@ -66,3 +110,4 @@ networks:
 #Volumes
 volumes:   
   db-data:
+  eldata:
