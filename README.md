@@ -1,27 +1,33 @@
 
-# docker development environment for lawline application
+# Docker development environment for lawline application
 
-Lawline dev environment setup on local ubnutu machine
+Lawline dev environment setup on local  machine
+
+ - Install latest version of docker and docker-compose ( This will run only ubuntu OS )
+
+		 bash dockerInstallation.sh
+
+ - MAC docker and docker-compose installation document click on [URL](https://docs.docker.com/docker-for-mac/install/ "URL")
+	You can check the docker version using 
+				docker --version
+				docker-compose --version
 
  - Checkout of git branch on your machine
 
      	git clone https://github.com/petabloc/docker-dev.git
 
- - Install latest version of docker and docker-compose
-
-		 bash dockerInstallation.sh
-
  - Checkout of dev-ui and dev-api code in current repo
 
-      - Change the volume path in docker-compose.yml volume section of php and php_api
+      - Change the volume path in docker-compose.yml volume section of php, php_api and File permission using :
 
-        	File permission using chmod 777 dev-ui -R && chmod 777 dev-api -R
+				chmod 777 dev-ui -R && chmod 777 dev-api -R
 
  - MySQL DB dump on local
 
-    - Download furthed.sql.gz from s3 bucket list
+    - Download furthed.sql.gz from s3 bucket list 
+		https://lawline-dev.s3.amazonaws.com/sql-import-files/furthered_2017-11-08.sql
     - Create furthed folder ( mkdir furthed )
-    - Keep that sql dump furthed.sql file in furthed dir
+    - Keep that downloaded sql dump as furthed.sql file in furthed dir
     - Change the volume setting in the docker-compose file
 
  - Run docker compose command
@@ -30,30 +36,32 @@ Lawline dev environment setup on local ubnutu machine
 
 			docker-compose up -d --build
 
-   - Create the container
+   - Create or up the container.
 
 			docker-compose up -d
 
- - Add web container IP address into the your hosts file. You can find the ip address using following command
+ - Map your local IP address to the domain which your going to use in  your hosts file. To find the ip of your local computer :
 
-        docker inspect web | grep "IPAddress"
+        ifconfig
 
-    EX : 172.19.0.6 docker.sixmilliondollarsite.com api.docker.sixmilliondollarsite.com
+    EX : 192.186.11.6 docker.sixmilliondollarsite.com api.docker.sixmilliondollarsite.com
 
- - Execute the below command to insert some of the rows for docker dev environment
-        docker exec -i db /usr/bin/mysql -u root --password=root furthered < dmlQueries.sql
+ - Execute the command to insert some of the rows for docker dev environment
+
+		docker exec -i db /usr/bin/mysql -u root --password=root furthered < dmlQueries.sql
 
 - Following Code changes on your local
  - Create the docker.php file and add below lines
    - ../vendor/furthered/bionic/config/docker.php
-		   <?php return ['api' => [ 'base_uri' => 'http://api.docker.sixmilliondollarsite.com', 'auth' => ['faster', 'stronger'], ],'redis' => ['host' => 'redis','port' => 6379,]];?>
+
+   		<?php return ['api' => [ 'base_uri' => 'http://api.docker.sixmilliondollarsite.com', 'auth' => ['faster', 'stronger'], ],'redis' => ['host' => 'redis','port' => 6379,]];?>
 
  - Replace or change the below line in file ( ../vendor/furthered/bionic/src/Config.php )  with 1st line to 2nd line
 
                #self::$config = require __DIR__ . '/../config/' . self::environment() . '.php';
                  self::$config = require __DIR__ . '/../config/docker.php';
 
- - .Env file changes are following
+ - .Env file changes are following in both dev-api and dev-ui
 
 		   APP_ENV=docker
 		   DB_CONNECTION=mysql
@@ -66,3 +74,11 @@ Lawline dev environment setup on local ubnutu machine
 		   REDIS_HOST=redis
 		   REDIS_PORT=6379
 
+		   ELASTICSEARCH_HOST=elasticsearch
+		   ELASTICSEARCH_PORT=9200
+
+	Note : Replace the DB_PASSWORD="........" with acutal furthered  DB dev password
+
+-  Execute the following command for product index in elasticsearch container
+
+			docker exec -it php_api php artisan search : index:products --refresh=1
